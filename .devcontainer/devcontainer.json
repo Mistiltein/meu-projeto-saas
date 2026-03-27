@@ -19,7 +19,6 @@
         "esbenp.prettier-vscode",
         "ms-vscode-remote.remote-containers",
         "ms-azuretools.vscode-docker",
-        "bradlc.vscode-tailwindcss",
         "yoavbls.pretty-ts-errors",
         "formulahendry.auto-rename-tag",
         "streetsidesoftware.code-spell-checker"
@@ -28,15 +27,18 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "eslint.validate": ["javascript", "typescript", "typescriptreact"],
-        "typescript.tsdk": "node_modules/typescript/lib",
-        "tailwindCSS.experimental.classRegex": [
-          ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
-        ]
+        "typescript.tsdk": "node_modules/typescript/lib"
       }
     }
   },
 
-  "postCreateCommand": "corepack enable pnpm && pnpm install --frozen-lockfile",
+  "remoteEnv": {
+    "COREPACK_ENABLE_DOWNLOAD_PROMPT": "0",
+    "PNPM_HOME": "/home/node/.local/share/pnpm"
+  },
+
+  // Comando mais seguro: cria pastas + ativa pnpm + instala dependências
+  "postCreateCommand": "mkdir -p /home/node/.local/bin /home/node/.local/share/pnpm && corepack enable --install-directory /home/node/.local/bin && export PATH=\"/home/node/.local/bin:$PATH\" && pnpm install --frozen-lockfile",
 
   "forwardPorts": [3000],
 
@@ -51,11 +53,5 @@
 
   "mounts": [
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"
-  ],
-
-  "hostRequirements": {
-    "cpus": 2,
-    "memory": "4gb",
-    "storage": "32gb"
-  }
+  ]
 }
