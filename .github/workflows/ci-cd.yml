@@ -33,6 +33,16 @@ jobs:
           pnpm lint
           pnpm build
 
+      # === Nova parte para corrigir o problema de lowercase ===
+      - name: Gerar metadados da Docker image
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha
+
       - name: Login no GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -45,6 +55,5 @@ jobs:
         with:
           context: .
           push: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' }}
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
