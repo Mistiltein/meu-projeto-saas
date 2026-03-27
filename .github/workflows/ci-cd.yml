@@ -10,22 +10,25 @@ jobs:
   test-and-build:
     runs-on: ubuntu-latest
 
-    # ←←← ADICIONAMOS ESSA PARTE AQUI
     permissions:
       contents: read
-      packages: write     # ← Permissão necessária para push no GHCR
+      packages: write
+
+    # Força Node 24 agora (remove o warning)
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6     # ← atualizado
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5    # ← atualizado (v5 é o mais recente)
         with:
           version: latest
 
       - name: Setup Node.js 24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5   # ← atualizado para v5 (suporta Node 24 nativamente)
         with:
           node-version: 24
           cache: 'pnpm'
