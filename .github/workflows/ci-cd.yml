@@ -14,21 +14,20 @@ jobs:
       contents: read
       packages: write
 
-    # Força Node 24 agora (remove o warning)
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout código
-        uses: actions/checkout@v6     # ← atualizado
+        uses: actions/checkout@v6
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v5    # ← atualizado (v5 é o mais recente)
+        uses: pnpm/action-setup@v5
         with:
           version: latest
 
       - name: Setup Node.js 24
-        uses: actions/setup-node@v5   # ← atualizado para v5 (suporta Node 24 nativamente)
+        uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: 'pnpm'
@@ -43,7 +42,7 @@ jobs:
 
       - name: Gerar metadados da Docker image
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
@@ -51,14 +50,14 @@ jobs:
             type=sha
 
       - name: Login no GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build e Push da imagem Docker
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' }}
