@@ -10,6 +10,11 @@ jobs:
   test-and-build:
     runs-on: ubuntu-latest
 
+    # ←←← ADICIONAMOS ESSA PARTE AQUI
+    permissions:
+      contents: read
+      packages: write     # ← Permissão necessária para push no GHCR
+
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
@@ -33,7 +38,6 @@ jobs:
           pnpm lint
           pnpm build
 
-      # === Nova parte para corrigir o problema de lowercase ===
       - name: Gerar metadados da Docker image
         id: meta
         uses: docker/metadata-action@v5
