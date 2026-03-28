@@ -6,10 +6,7 @@
   },
 
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "version": "latest",
-      "moby": true
-    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": { "version": "latest", "moby": true },
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
@@ -35,13 +32,11 @@
     }
   },
 
-  // Variáveis de ambiente que serão injetadas no container
   "remoteEnv": {
     "COREPACK_ENABLE_DOWNLOAD_PROMPT": "0",
     "PNPM_HOME": "/home/node/.local/share/pnpm"
   },
 
-  // Como já configuramos tudo no Dockerfile, o postCreateCommand fica simples
   "postCreateCommand": "pnpm install --frozen-lockfile",
 
   "forwardPorts": [3000],
