@@ -1,6 +1,9 @@
 {
   "name": "Next.js 16 + pnpm + Docker Dev Environment",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:24-bookworm",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
 
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
@@ -32,13 +35,14 @@
     }
   },
 
+  // Variáveis de ambiente que serão injetadas no container
   "remoteEnv": {
     "COREPACK_ENABLE_DOWNLOAD_PROMPT": "0",
     "PNPM_HOME": "/home/node/.local/share/pnpm"
   },
 
-  // Comando mais seguro: cria pastas + ativa pnpm + instala dependências
-  "postCreateCommand": "mkdir -p /home/node/.local/bin /home/node/.local/share/pnpm && corepack enable --install-directory /home/node/.local/bin && export PATH=\"/home/node/.local/bin:$PATH\" && pnpm install --frozen-lockfile",
+  // Como já configuramos tudo no Dockerfile, o postCreateCommand fica simples
+  "postCreateCommand": "pnpm install --frozen-lockfile",
 
   "forwardPorts": [3000],
 
