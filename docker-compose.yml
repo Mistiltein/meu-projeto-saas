@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   app:
     build:
@@ -10,13 +8,15 @@ services:
       - "3000:3000"
     volumes:
       - .:/workspaces/meu-projeto-saas
-      - /workspaces/meu-projeto-saas/node_modules # evita sobrescrever node_modules
+      - /workspaces/meu-projeto-saas/node_modules
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/meu_projeto_saas?schema=public
     depends_on:
       - db
     command: pnpm dev
+    stdin_open: true
+    tty: true
 
   db:
     image: postgres:16-alpine
