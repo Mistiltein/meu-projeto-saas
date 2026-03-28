@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    container_name: meu-projeto-saas-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/workspaces/meu-projeto-saas
+      - /workspaces/meu-projeto-saas/node_modules # evita sobrescrever node_modules
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/meu_projeto_saas?schema=public
+    depends_on:
+      - db
+    command: pnpm dev
+
+  db:
+    image: postgres:16-alpine
+    container_name: meu-projeto-saas-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: meu_projeto_saas
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer:latest
+    container_name: meu-projeto-saas-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
